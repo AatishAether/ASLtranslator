@@ -30,7 +30,7 @@ def load_dataset():
         for idx in tqdm(range(n)):
             save_landmarks_from_video(videos_not_in_dataset[idx])
 
-    return videos
+    return (n,dataset)
 
 
 def load_reference_signs(videos):
@@ -41,9 +41,10 @@ def load_reference_signs(videos):
 
         left_hand_list = load_array(os.path.join(path, f"lh_{video_name}.pickle"))
         right_hand_list = load_array(os.path.join(path, f"rh_{video_name}.pickle"))
+        pose_list= load_array(os.path.join(path, f"pose_{video_name}.pickle"))
 
         reference_signs["name"].append(sign_name)
-        reference_signs["sign_model"].append(SignModel(left_hand_list, right_hand_list))
+        reference_signs["sign_model"].append(SignModel(pose_list,left_hand_list, right_hand_list))
         reference_signs["distance"].append(0)
     
     reference_signs = pd.DataFrame(reference_signs, dtype=object)

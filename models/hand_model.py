@@ -16,10 +16,21 @@ class HandModel(object):
     def __init__(self, landmarks: List[float]):
 
         # Define the connections
-        self.connections = mp.solutions.holistic.HAND_CONNECTIONS
+        self.connections = mp.solutions.hands.HAND_CONNECTIONS
+        #IS this ever used? It defines the
+        '''
+            HAND_PALM_CONNECTIONS
+            HAND_THUMB_CONNECTIONS
+            HAND_INDEX_FINGER_CONNECTIONS
+            HAND_MIDDLE_FINGER_CONNECTIONS
+            HAND_RING_FINGER_CONNECTIONS
+            HAND_PINKY_FINGER_CONNECTIONS
+        '''
+        
 
         # Create feature vector (list of the angles between all the connections)
         landmarks = np.array(landmarks).reshape((21, 3))
+        self.landmarks = landmarks
         self.feature_vector = self._get_feature_vector(landmarks)
 
     def _get_feature_vector(self, landmarks: np.ndarray) -> List[float]:
@@ -30,6 +41,9 @@ class HandModel(object):
             List of length nb_connections * nb_connections containing
             all the angles between the connections
         """
+        #Different than self.connections
+        #self.connections is pre-defined
+        #This is current existing
         connections = self._get_connections_from_landmarks(landmarks)
 
         angles_list = []

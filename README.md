@@ -1,9 +1,13 @@
-# Sign Language Recognition - using MediaPipe and DTW
+#American Sign Language (ASL) Recognition w/ MediaPipe's Hollistic Model and Dynamic Time Warping (DTW)
 
 ![License: MIT](https://img.shields.io/badge/license-MIT-green)
 
 This repository proposes an implementation of a Sign Recognition Model using the **MediaPipe** library 
 for landmark extraction and **Dynamic Time Warping** (DTW) as a similarity metric between signs.
+This is a fork of gabguerin's Sign-Language-Recognition--MediaPipe-DTW found here:
+https://github.com/gabguerin/Sign-Language-Recognition--MediaPipe-DTW
+
+*NOTE:* This utilizes the legacy MediaPipe solutions and is intended to upgrade to the newer models soon. Until then, strange behavior was experienced with versions of mediapipe > version 0.8.9.1. Python 3.7 was found to fit this version requirement. It is highly recommended to use a virtual environment and pip3.7 install requirements.txt
 
 ![](example.gif)
 
@@ -16,7 +20,7 @@ ___
 
 ### 2. Install the necessary libraries
 
-- ` pip install -r requirements.txt `
+- ` pip3.7 install -r requirements.txt `
 
 ### 3. Import Videos of signs which will be considered as reference
 The architecture of the `videos/` folder must be:
@@ -33,12 +37,6 @@ The architecture of the `videos/` folder must be:
             ...
 ```
 
-To automatically create a small dataset of French signs:
-
-- Install `ffmpeg` (for MacOS `brew install ffmpeg`)
-- Run: ` python yt_download.py `
-- Add more YouTube links in ``yt_links.csv`` if needed
-> N.B. The current dataset is insufficient to obtain good results. Feel free to add more links or import your own videos 
 
 ### 4. Load the dataset and turn on the Webcam
 
@@ -61,13 +59,17 @@ For now, the implementation only uses the Hand model to predict the sign.
 If a hand is not present we set all the positions to zero.
 
 - In order to be **invariant to orientation and scale**, the **feature vector** of the
-HandModel is a **list of the angles** between all the connexions of the hand.
+HandModel is a **list of the angles** between all the connections of the hand.
+
+-Per frame basis
 
 ### *Sign Model*
 
 - The **SignModel** is created from a list of landmarks (extracted from a video)
 
 - For each frame, we **store** the **feature vectors** of each hand.
+
+-Per Time Series basis
 
 ### *Sign Recorder*
 
@@ -80,9 +82,19 @@ all the reference signs present in the dataset.
 
 -  DTW is widely used for computing time series similarity.
 
-- In this project, we compute the DTW of the variation of hand connexion angles over time.
+- In this project, we compute the DTW of the variation of hand connection angles over time.
 
 ___
+
+## *Current Limitations*
+
+- Needs Pose Feature Vectorization, then a Hollistic model that compares Hand features to Pose features.
+
+- Needs a similar approach for Face features. Considering a Semantic/Emotional Analysis model built in to the Face model
+
+- Once Pose Feature Vectorization is realized, larger annotated datasets can be brought in
+
+- Once larger datasets are brought in, DTWnet can be implemented
 
 ## References
 
