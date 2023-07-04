@@ -9,7 +9,7 @@ https://github.com/gabguerin/Sign-Language-Recognition--MediaPipe-DTW
 
 *NOTE:* This utilizes the legacy MediaPipe solutions and is intended to upgrade to the newer models soon. Until then, strange behavior was experienced with versions of mediapipe > version 0.8.9.1. Python 3.7 was found to fit this version requirement. It is highly recommended to use a virtual environment and pip3.7 install requirements.txt
 
-![](example.gif)
+![]()
 
 #### Source : https://www.sicara.ai/blog/sign-language-recognition-using-mediapipe
 ___
