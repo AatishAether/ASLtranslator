@@ -6,7 +6,7 @@ import mediapipe as mp
 WHITE_COLOR = (245, 242, 226)
 RED_COLOR = (25, 35, 240)
 
-HEIGHT = 600
+HEIGHT = 720
 
 
 class WebcamManager(object):
@@ -20,21 +20,22 @@ class WebcamManager(object):
     def update(
         self, frame: np.ndarray, results, sign_detected: str, is_recording: bool
     ):
+        handsFrame = np.zeros((480,640,3), dtype=np.uint8)
         self.sign_detected = sign_detected
 
         # Draw landmarks
         self.draw_landmarks(frame, results)
+        #self.draw_hands(handsFrame,results)
 
         WIDTH = int(HEIGHT * len(frame[0]) / len(frame))
         # Resize frame
         frame = cv2.resize(frame, (WIDTH, HEIGHT), interpolation=cv2.INTER_AREA)
-
         # Flip the image vertically for mirror effect
         frame = cv2.flip(frame, 1)
-
+        
         # Write result if there is
         frame = self.draw_text(frame)
-
+        
         # Chose circle color
         color = WHITE_COLOR
         if is_recording:
@@ -43,6 +44,7 @@ class WebcamManager(object):
         # Update the frame
         cv2.circle(frame, (30, 30), 20, color, -1)
         cv2.imshow("OpenCV Feed", frame)
+        #cv2.imshow("Skeleton",handsFrame)
 
     def draw_text(
         self,
@@ -86,10 +88,8 @@ class WebcamManager(object):
             connections=mp_holistic.HAND_CONNECTIONS,
             landmark_drawing_spec = mp_drawing_styles.get_default_hand_landmarks_style(),
             connection_drawing_spec = mp_drawing_styles.get_default_hand_connections_style()
-            )
-            
-        
-
+            ) 
+        # Draw right hand connections
         mp_drawing.draw_landmarks(
             image,
             landmark_list=results.right_hand_landmarks,
@@ -97,5 +97,37 @@ class WebcamManager(object):
             landmark_drawing_spec = mp_drawing_styles.get_default_hand_landmarks_style(),
             connection_drawing_spec = mp_drawing_styles.get_default_hand_connections_style()
             )
+
+        ##Black frame
+        # Draw left hand connections
+        #mp_drawing.draw_landmarks(
+        #    handsFrame,
+        #    landmark_list=results.left_hand_landmarks,
+        #    connections=mp_holistic.HAND_CONNECTIONS,
+        #    landmark_drawing_spec = mp_drawing_styles.get_default_hand_landmarks_style(),
+        #    connection_drawing_spec = mp_drawing_styles.get_default_hand_connections_style()
+        #    ) 
+        ## Draw right hand connections
+        #mp_drawing.draw_landmarks(
+        #    handsFrame,
+        #    landmark_list=results.right_hand_landmarks,
+        #    connections=mp_holistic.HAND_CONNECTIONS,
+        #    landmark_drawing_spec = mp_drawing_styles.get_default_hand_landmarks_style(),
+        #    connection_drawing_spec = mp_drawing_styles.get_default_hand_connections_style()
+        #    )
+        #mp_drawing.draw_landmarks(
+        #    handsFrame,
+        #    landmark_list=results.pose_landmarks,
+        #    connections=mp_holistic.POSE_CONNECTIONS,
+        #    landmark_drawing_spec = mp_drawing_styles.get_default_pose_landmarks_style(),
+        #)
+        #mp_drawing.draw_landmarks(
+        #    handsFrame,
+        #    results.face_landmarks,
+        #    mp_holistic.FACEMESH_CONTOURS,
+        #    landmark_drawing_spec=None,
+        #    connection_drawing_spec=mp_drawing_styles.get_default_face_mesh_contours_style()
+        #)
         
-        
+       
+   

@@ -11,25 +11,33 @@ def mediapipe_detection(image, model):
     return image, results
 
 
-def draw_landmarks(image, results):
-    mp_holistic = mp.solutions.holistic  # Holistic model
-    mp_hands = mp.solutions.hands
-    mp_drawing = mp.solutions.drawing_utils  # Drawing utilities
-    mp_drawing_styles = mp.solutions.drawing_styles
-
-    # Draw left hand connections
-    mp_drawing.draw_landmarks(
-        image,
-        hand_landmarks = results.left_hand_landmarks,
-        connections=mp_hands.HAND_CONNECTIONS,
-        land_drawSpec = mp_drawing_styles.get_default_hand_landmarks_style(),
-        conn_drawSpec = mp_drawing_styles.get_default_hand_connections_style())
-
-    mp_drawing.draw_landmarks(
-        image,
-        hand_landmarks = results.right_hand_landmarks,
-        connections=mp_hands.HAND_CONNECTIONS,
-        land_drawSpec = mp_drawing_styles.get_default_hand_landmarks_style(),
-        conn_drawSpec = mp_drawing_styles.get_default_hand_connections_style()
-    )
-    return image
+#def draw_landmarks(image, results):
+#    mp_holistic = mp.solutions.holistic  # Holistic model
+#    mp_hands = mp.solutions.hands
+#    mp_drawing = mp.solutions.drawing_utils  # Drawing utilities
+#    mp_drawing_styles = mp.solutions.drawing_styles
+#
+#    # Draw left hand connections
+#    mp_drawing.draw_landmarks(
+#        image,
+#        hand_landmarks = results.left_hand_landmarks,
+#        connections=mp_hands.HAND_CONNECTIONS,
+#        land_drawSpec = mp_drawing_styles.get_default_hand_landmarks_style(),
+#        conn_drawSpec = mp_drawing_styles.get_default_hand_connections_style())
+#
+#    mp_drawing.draw_landmarks(
+#        image,
+#        hand_landmarks = results.right_hand_landmarks,
+#        connections=mp_hands.HAND_CONNECTIONS,
+#        land_drawSpec = mp_drawing_styles.get_default_hand_landmarks_style(),
+#        conn_drawSpec = mp_drawing_styles.get_default_hand_connections_style()
+#    )
+#    mp_drawing.draw_landmarks(
+#        image,
+#        results.pose_landmarks,
+#        mp_holistic.POSE_CONNECTIONS,
+#        landmark_drawking_spec=mp_drawing_styles.get_default_pose_landmakrs_style()
+#    )
+#    
+#    return image
+#

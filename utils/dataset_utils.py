@@ -30,6 +30,14 @@ def load_dataset():
         for idx in tqdm(range(n)):
             save_landmarks_from_video(videos_not_in_dataset[idx])
 
+        ##Reload dataset array for new signs. Could be an append instead of loading the whole thing again
+        dataset = [
+        file_name.replace(".pickle", "").replace("pose_", "")
+        for root, dirs, files in os.walk(os.path.join("data", "dataset"))
+        for file_name in files
+        if file_name.endswith(".pickle") and file_name.startswith("pose_")
+        ]
+
     return (n,dataset)
 
 

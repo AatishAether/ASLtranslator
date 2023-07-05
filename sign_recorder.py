@@ -45,7 +45,7 @@ class SignRecorder(object):
             else:
                 #Once we do, compute distances of ALL reference signs
                 self.compute_distances()                
-                print(self.reference_signs)
+                print(self.reference_signs.head())
 
         if np.sum(self.reference_signs["distance"].values) == 0:
             return "", self.is_recording
@@ -85,17 +85,16 @@ class SignRecorder(object):
         # Compute sign similarity with DTW (ascending order)
         self.reference_signs = dtw_distances(self.recorded_sign, self.reference_signs)
 
-        
-        # Reset variables
+        #Once we've updated our dataframe, the comparison between the recorded_sign and the reference_sign is store there
+        #So we can reset variables for the next recorded_sign to come in
         self.recorded_results = []
         self.is_recording = False
         
-
+    #Voting algorithm after DTW sorts by ascending order
     def _get_sign_predicted(self, batch_size=5, threshold=0.5):
         """
         Method that outputs the sign that appears the most in the list of closest
-        reference signs, only if its propo
-        rtion within the batch is greater than the threshold
+        reference signs, only if its proportion within the batch is greater than the threshold
 
         :param batch_size: Size of the batch of reference signs that will be compared to the recorded sign
         :param threshold: If the proportion of the most represented sign in the batch is greater than threshold,

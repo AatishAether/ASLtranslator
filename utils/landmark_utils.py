@@ -66,12 +66,13 @@ def save_landmarks_from_video(video_name):
                 break
         cap.release()
 
-    # Create the folder of the sign if it doesn't exists
+    # Create the folder of the sign if it doesn't exist
     path = os.path.join("data", "dataset", sign_name)
     if not os.path.exists(path):
         os.mkdir(path)
 
-    # Create the folder of the video data if it doesn't exists
+    ##7/5/23 - I don't think this is necessary if we're not utilizing yt_download
+    # Create the folder of the video data if it doesn't exist
     data_path = os.path.join(path, video_name)
     if not os.path.exists(data_path):
         os.mkdir(data_path)

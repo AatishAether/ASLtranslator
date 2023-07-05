@@ -19,11 +19,10 @@ mp_drawing_styles = mp.solutions.drawing_styles
 def main():
     # Create dataset of the videos where landmarks have not been extracted yet
     print("Reading Dataset...")
+    #n is num of new vids
     n,dataset = load_dataset()
 
-    # Create a DataFrame of reference signs (name: str, model: SignModel, distance: int)
-    ##I think this is cause a huge bog down. If we can save the reference signs dataFrame
-    ##This can save time
+    # Create a DataFrame of reference signs (name: str, model: SignModel, distance: int) 
     print("Loading Signs...")
     if not (os.path.exists("./referenceSigns.pickle")) or (n > 0):
         reference_signs = load_reference_signs(dataset)
@@ -53,14 +52,14 @@ def main():
             # Read feed
             ret, frame = cap.read()
 
-            # Make detections
-            image, results = mediapipe_detection(frame, holistic)
+            # Make detections of hands or body (or face)
+            image, mpResults = mediapipe_detection(frame, holistic)
 
             # Process results
-            sign_detected, is_recording = sign_recorder.process_results(results)
+            sign_detected, is_recording = sign_recorder.process_results(mpResults)
 
             # Update the frame (draw landmarks & display result)
-            webcam_manager.update(frame, results, sign_detected, is_recording)
+            webcam_manager.update(frame, mpResults, sign_detected, is_recording)
 
             pressedKey = cv2.waitKey(1) & 0xFF
             if pressedKey == ord("r"):  # Record pressing r

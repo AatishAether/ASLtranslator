@@ -17,7 +17,7 @@ class HandModel(object):
 
         # Define the connections
         self.connections = mp.solutions.hands.HAND_CONNECTIONS
-        #IS this ever used? It defines the
+        #This is used to map the landmarks to the connections
         '''
             HAND_PALM_CONNECTIONS
             HAND_THUMB_CONNECTIONS

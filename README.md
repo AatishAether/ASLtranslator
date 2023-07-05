@@ -28,12 +28,12 @@ The architecture of the `videos/` folder must be:
 |data/
     |-videos/
           |-Hello/
-            |-<video_of_hello_1>.mp4
-            |-<video_of_hello_2>.mp4
+            |-<video_of_hello-1>.mp4
+            |-<video_of_hello-2>.mp4
             ...
           |-Thanks/
-            |-<video_of_thanks_1>.mp4
-            |-<video_of_thanks_2>.mp4
+            |-<video_of_thanks-1>.mp4
+            |-<video_of_thanks-2>.mp4
             ...
 ```
 
