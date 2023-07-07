@@ -1,6 +1,7 @@
 import cv2
 import mediapipe as mp
 import os
+import sys
 import pickle
 import pandas as pd
 
@@ -15,6 +16,10 @@ mp_drawing = mp.solutions.drawing_utils
 mp_drawing_styles = mp.solutions.drawing_styles
 #mp_hands = mp.solutions.hands
 
+
+video = str(sys.argv[1])
+if sys.argv[1] == 'stream':
+    video = 0
 
 def main():
     # Create dataset of the videos where landmarks have not been extracted yet
@@ -42,7 +47,7 @@ def main():
     webcam_manager = WebcamManager()
 
     # Turn on the webcam
-    cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)
+    cap = cv2.VideoCapture(video, cv2.CAP_DSHOW)
     # Set up the Mediapipe environment
     with mp.solutions.holistic.Holistic(
         min_detection_confidence=0.5, min_tracking_confidence=0.5
@@ -51,6 +56,10 @@ def main():
 
             # Read feed
             ret, frame = cap.read()
+
+            if not ret:
+                print("Can't receive frame (Stream end?)...")
+
 
             # Make detections of hands or body (or face)
             image, mpResults = mediapipe_detection(frame, holistic)

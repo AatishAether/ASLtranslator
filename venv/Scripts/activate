@@ -37,7 +37,7 @@ deactivate () {
 # unset irrelevant variables
 deactivate nondestructive
 
-VIRTUAL_ENV="Z:\Github\ASLtranslator\venv"
+VIRTUAL_ENV="C:\Users\ather\Documents\GitHub\ASLtranslator\venv"
 export VIRTUAL_ENV
 
 _OLD_VIRTUAL_PATH="$PATH"
