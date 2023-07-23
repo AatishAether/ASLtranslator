@@ -5,6 +5,9 @@ import mediapipe as mp
 
 WHITE_COLOR = (245, 242, 226)
 RED_COLOR = (25, 35, 240)
+BGCOLOR = (245, 242, 176, 0.85)
+FONTCOLOR = (118, 62, 37)
+FONT = cv2.FONT_HERSHEY_COMPLEX
 
 HEIGHT = 720
 
@@ -14,15 +17,20 @@ class WebcamManager(object):
     outputs the sign prediction
     """
 
-    def __init__(self):
+    def __init__(self,showImg,showHands,showBody):
         self.sign_detected = ""
+        self.show_hands = showHands
+        self.show_body = showBody
+        self.show_img = showImg
 
     def update(
-        self, frame: np.ndarray, results, sign_detected: str, is_recording: bool
+        self, frame: np.ndarray, results, sign_detected: str, is_recording: bool, show_image: bool, show_hands: bool, show_body: bool
     ):
         handsFrame = np.zeros((480,640,3), dtype=np.uint8)
         self.sign_detected = sign_detected
-
+        self.show_img = show_image
+        self.show_body = show_body
+        self.show_hands = show_hands
         # Draw landmarks
         self.draw_landmarks(frame, results)
         #self.draw_hands(handsFrame,results)
@@ -34,46 +42,70 @@ class WebcamManager(object):
         frame = cv2.flip(frame, 1)
         
         # Write result if there is
-        frame = self.draw_text(frame)
-        
-        # Chose circle color
-        color = WHITE_COLOR
-        if is_recording:
-            color = RED_COLOR
-
+        frame = self.drawResults(frame,self.sign_detected)
+        frame = self.drawRecordButton(frame,is_recording) 
+        frame = self.drawToggles(frame,self.show_img,self.show_body,self.show_hands)        
         # Update the frame
-        cv2.circle(frame, (30, 30), 20, color, -1)
         cv2.imshow("OpenCV Feed", frame)
         #cv2.imshow("Skeleton",handsFrame)
+    def drawRecordButton(self,frame,is_recording):
+        #Choose color
+        circle_color = RED_COLOR if is_recording else WHITE_COLOR
+        cv2.circle(frame, (30, 30), 20, circle_color, -1)
+        return frame
+        
+    def drawResults(self,frame,sign_detected):
+        font_size = 1
+        font_thickness=2
+        offset = int(HEIGHT * 0.02)
+        window_w = int(HEIGHT  * len(frame[0]) / len(frame))
 
-    def draw_text(
-        self,
-        frame,
-        font=cv2.FONT_HERSHEY_COMPLEX,
-        font_size=1,
-        font_thickness=2,
-        offset=int(HEIGHT * 0.02),
-        bg_color=(245, 242, 176, 0.85),
-    ):
-        window_w = int(HEIGHT * len(frame[0]) / len(frame))
+        (text_w, text_h), _ = cv2.getTextSize(sign_detected, FONT, font_size, font_thickness)
+        text_x, text_y = int((window_w - text_w)/2), HEIGHT - text_h - offset
 
-        (text_w, text_h), _ = cv2.getTextSize(
-            self.sign_detected, font, font_size, font_thickness
-        )
-
-        text_x, text_y = int((window_w - text_w) / 2), HEIGHT - text_h - offset
-
-        cv2.rectangle(frame, (0, text_y - offset), (window_w, HEIGHT), bg_color, -1)
+        cv2.rectangle(frame, (0, text_y - offset), (window_w, HEIGHT), BGCOLOR, -1)
         cv2.putText(
             frame,
-            self.sign_detected,
+            sign_detected,
             (text_x, text_y + text_h + font_size - 1),
-            font,
+            FONT,
             font_size,
-            (118, 62, 37),
+            FONTCOLOR,
             font_thickness,
         )
         return frame
+    
+    def drawToggles(self,frame,show_img,show_hands,show_body):
+        font_size = 1
+        font_thickness=1
+        offset = int(HEIGHT * 0.02)
+        window_w = int(HEIGHT  * len(frame[0]) / len(frame))
+
+        ###HANDS
+        text = "Hands"
+        (text_w, text_h), _ = cv2.getTextSize(text, FONT, font_size, font_thickness)
+        text_x,text_y = int(window_w - text_w)-offset,text_h+offset
+        cv2.putText(frame,
+                    text,(text_x,text_y+text_h+font_size - 1),
+                    FONT,font_size,FONTCOLOR,font_thickness)
+        cv2.createButton("Hands",self.draw_landmarks,None,cv2.QT_PUSH_BUTTON,1)
+
+        ###BODY
+        text = "Body"
+        (text_w, text_h), _ = cv2.getTextSize(text, FONT, font_size, font_thickness)
+        text_x,text_y = int(window_w - text_w)-offset,text_h+offset
+        cv2.putText(frame,
+                    text,(text_x,text_y+text_h*2+font_size*2 - 1),
+                    FONT,font_size,FONTCOLOR,font_thickness)
+
+        ###IMAGE
+        text = "Image"
+        (text_w, text_h), _ = cv2.getTextSize(text, FONT, font_size, font_thickness)
+        text_x,text_y = int(window_w - text_w)-offset,text_h+offset
+        cv2.putText(frame,
+                    text,(text_x,text_y+text_h*3+font_size*3 - 1),
+                    FONT,font_size,FONTCOLOR,font_thickness)
+        return frame 
 
     @staticmethod
     def draw_landmarks(image, results):

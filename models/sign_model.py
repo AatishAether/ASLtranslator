@@ -24,7 +24,6 @@ class SignModel(object):
         self.has_left_hand = np.sum(left_hand_list) != 0
         self.has_right_hand = np.sum(right_hand_list) != 0
 
-        self.poseModel = PoseModel()
         #Features of each hand.
         #I think of it as self referencing rather than world coords
         ##The HandModel creates a featureList of angles of
@@ -32,7 +31,6 @@ class SignModel(object):
         ###This way it's not referencing where the hand landmarks are on screen but rather to themselves
         self.lh_embedding = self._get_embedding_from_landmark_list(left_hand_list)
         self.rh_embedding = self._get_embedding_from_landmark_list(right_hand_list)
-        self.pose_embedding = self.poseModel()
 
     @staticmethod
     def _get_embedding_from_landmark_list(

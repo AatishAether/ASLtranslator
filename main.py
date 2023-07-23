@@ -16,10 +16,15 @@ mp_drawing = mp.solutions.drawing_utils
 mp_drawing_styles = mp.solutions.drawing_styles
 #mp_hands = mp.solutions.hands
 
-
+##Init Vars
 video = str(sys.argv[1])
 if sys.argv[1] == 'stream':
     video = 0
+
+showImg = True
+showHands = True
+showBody = True
+
 
 def main():
     # Create dataset of the videos where landmarks have not been extracted yet
@@ -44,7 +49,7 @@ def main():
     sign_recorder = SignRecorder(reference_signs)
 
     # Object that draws keypoints & displays results
-    webcam_manager = WebcamManager()
+    webcam_manager = WebcamManager(showImg,showHands,showBody)
 
     # Turn on the webcam
     cap = cv2.VideoCapture(video, cv2.CAP_DSHOW)
@@ -67,8 +72,9 @@ def main():
             # Process results
             sign_detected, is_recording = sign_recorder.process_results(mpResults)
 
+
             # Update the frame (draw landmarks & display result)
-            webcam_manager.update(frame, mpResults, sign_detected, is_recording)
+            webcam_manager.update(frame, mpResults, sign_detected, is_recording, showImg, showHands, showBody)
 
             pressedKey = cv2.waitKey(1) & 0xFF
             if pressedKey == ord("r"):  # Record pressing r
@@ -82,6 +88,7 @@ def main():
                 #features = features.replace("'",'')
                 #features = list(features.split(","))
                 #features = list(map(float,features))
+                #print(features)
                 with open("openHand.pickle", "wb") as f:
                     pickle.dump(features,f)
 
