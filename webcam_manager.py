@@ -44,7 +44,7 @@ class WebcamManager(object):
         # Write result if there is
         frame = self.drawResults(frame,self.sign_detected)
         frame = self.drawRecordButton(frame,is_recording) 
-        frame = self.drawToggles(frame,self.show_img,self.show_body,self.show_hands)        
+        #frame = self.drawToggles(frame,self.show_img,self.show_body,self.show_hands)        
         # Update the frame
         cv2.imshow("OpenCV Feed", frame)
         #cv2.imshow("Skeleton",handsFrame)
